@@ -1,0 +1,67 @@
+.ico{
+	&_center{
+		margin: 0 30px;
+	}
+	&-fb {
+		&:before {
+			@include ft-icon($ft-fb);
+		}
+	}
+	&-vk{
+		&:before {
+			@include ft-icon($ft-vk);
+			font-size: 80%;
+			width: 2em;
+		}
+	}
+	&-tw{
+		&:before {
+			@include ft-icon($ft-twitter);
+			width: 1.4em;
+			font-size: 80%;
+		}
+	}
+	&-yt {
+		&:before {
+			@include ft-icon($ft-youtube);
+			font-size: 80%;
+			width: 2em;
+		}
+	}
+	&-ok {
+		&:before {
+			@include ft-icon($ft-ok);
+		}
+	}
+	&-ig {
+		vertical-align: middle;
+		&:before {
+			@include ft-icon($ft-ig);
+		}
+	}
+	&-ruble{
+		width: 	23px;
+		height: 26px;
+		display: 	inline-block;
+		vertical-align: middle;
+		background: 	url(~@/assets/images/ruble.png) no-repeat;
+	}
+	&-user{
+		width: 60px;
+		height: 60px;
+		background: url(~@/assets/images/user.png) center center no-repeat;
+	}
+	&-phone{
+		width: 42px !important;
+		text-align: center;
+		padding-left: 4px;
+		background-image: url(~@/assets/images/phone-call.svg);
+		background-position: center;
+		background-size: 90%;
+		background-repeat: no-repeat;
+	}
+	&-map-marker{
+		width: 42px !important;
+		background: url(~@/assets/images/placeholder.svg) center center no-repeat;
+	}
+}

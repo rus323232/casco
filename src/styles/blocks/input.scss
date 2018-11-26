@@ -1,0 +1,125 @@
+$selector : '.b-input';
+
+#{$selector}:last-child{
+  margin-bottom: 0px;
+}
+
+#{$selector} {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+
+  &._large {
+    height: 120px;
+  }
+
+  &._disabled {
+    input, textarea {
+      color: $grey;
+      background-color: $grey-lighter;
+      cursor: not-allowed;
+    }
+  }
+
+  input, textarea {
+    &::placeholder {
+      text-transform: uppercase;
+    }
+  }
+
+  input, textarea, select {
+    font-family: $open-sans;
+    height: 60px;
+    border: 1px solid $grey-light;
+    box-shadow: none;
+    text-overflow: ellipsis;
+    padding: 0 30px 0 15px;
+    background-color: $white;
+    width: 100%;
+    font-size: rem(14);
+    text-transform: none;
+    
+    &:focus {
+      border: 1px solid $blue;
+      outline: none;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+    }
+
+    &::placeholder {
+      text-transform: none;
+    }
+  }
+  select {
+    background-image: url('~@/assets/images/angle.png');
+    background-position: calc(100% - 13px) 50%;
+    background-size: 11px;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+
+    &::-ms-expand {
+      display: none;
+    }
+
+  }
+  textarea {
+    padding: 15px 15px 0 15px;
+    resize: none;
+    height: 120px;
+    white-space: pre-line;
+  }
+  label {
+    display: block;
+    color: $grey-medium;
+    padding: 0 20px 0 0;
+    font-size: rem(12);
+    max-height: 25px;
+    max-width: 90%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 700;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+
+  &__error {
+    pointer-events: none;
+    display: none;
+    margin-left: 20px;
+    color: $error;
+    font-size: rem(12);
+  }
+
+  &._required {
+    label {
+      .b-input__caption {
+        position: relative;
+      }
+
+      &::after {
+        content: '*';
+        position: absolute;
+        font-size: 12px;
+        color: $red;
+        right: 10px;
+        top: 1px;
+      }
+    }
+  }
+
+  &._error {
+    input, textarea, select {
+      border: 1px solid $red;
+    }
+
+    #{$selector}__error {
+      display: block;
+    }
+  }
+}

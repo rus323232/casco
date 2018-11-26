@@ -1,0 +1,49 @@
+.b-phone-city {
+	&__number {
+		line-height: 1;
+		font-size: 20px;
+		color: #37383d;
+		cursor: default;
+
+		&:hover {
+			color: #37383d;
+		}
+	}
+
+	&__option {
+		white-space: nowrap;
+		font-family: $open-sans;
+		color: #868686;
+
+		&_arrowed:after {
+			@include ft-icon($ft-angle-down);
+			position: relative;
+			display: inline-block;
+			vertical-align: middle;
+			font-size: 15px;
+			margin-top: -1px;
+			margin-left: 2px;
+			margin-right: -10px;
+			display: inline-block;
+		}
+	}
+}
+
+
+.b-phone-city._dark {
+	.b-phone-city {
+		&__number {
+			color: #fff;
+		}
+
+		&__option {
+			opacity: .5;
+			color: #fff;
+
+			&:hover {
+				opacity: 1;
+				color: $accent;
+			}
+		}
+	}
+}

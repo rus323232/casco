@@ -1,0 +1,31 @@
+// size values
+$container-width: 1170px;
+
+// Typography
+$open-sans: 'OpenSansRegular', sans-serif;
+$open-sans-semibold: 'OpenSansSemibold', $open-sans, sans-serif;
+$open-sans-bold: 'OpenSansBold', $open-sans-semibold, $open-sans, sans-serif;
+$open-sans-extrabold: 'OpenSansExtraBold', $open-sans-bold, $open-sans, sans-serif;
+$rem: 16;
+
+// Colors
+$primary: #000000;
+$accent: #ef6b1a;
+$accent-gradient: linear-gradient(233deg, #ef6b1a 0%, #ff8f00 100%);
+$error: #d0021b;
+$black: #333333;
+$grey: #4c4c4c;
+$grey-medium: #7f7f7f;
+$grey-light: #dde0e1;
+$grey-lighter: #f7f7f7;
+$white: #ffffff;
+$green: #58a947;
+$blue: #019ad6;
+$red: hsl(0,  100%, 53%);
+$body-bg-color: $white;
+
+// breakpoints
+$phone: 480px;
+$tablet: 768px;
+$small-desktop: 1024px;
+$desktop: 1224px;

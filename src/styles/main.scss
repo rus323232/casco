@@ -1,0 +1,109 @@
+//normalize
+@import '_normalize.scss';
+
+// Fonts
+@import 'fonts';
+
+//functions, mixins, vars
+@import 'abstract';
+
+//helpers
+@import 'helpers';
+
+//common blocks
+@import 'blocks';
+
+//icons
+@import 'icons';
+
+html, body {
+  font-size: #{$rem}px;
+  font-family: $open-sans;
+  line-height: 28px;
+}
+
+input::-ms-clear {
+  display: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+h1, h2, h3, h4, h5 {
+  color: $primary;
+  line-height: rem(46);
+  letter-spacing: rem(0.5);
+  margin: 0;
+}
+
+h1 {
+  font-family: $open-sans-extrabold;
+  font-size: rem(48);
+}
+
+h2, h3, h4, h5 {
+  font-family: $open-sans-bold;
+}
+
+h2 {
+  font-size: rem(36);
+}
+
+h3 {
+  font-size: rem(22);
+}
+
+#app {
+  position: relative;
+}
+
+//vue transition styles
+.slide-leave-active,
+.slide-enter-active {
+  transition: 6s;
+}
+
+.slide-enter {
+  opacity: 1;
+}
+
+.slide-leave-to {
+  display: none;
+  opacity: 0;
+}
+
+.img-slider{
+  overflow: hidden;
+  position: relative;
+}
+
+.transition-acc {
+  transition: .3s ease-out;
+  overflow: hidden;
+}
+
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  transition: opacity .5s;
+  transition-delay: .5s;
+  opacity: 0;
+}

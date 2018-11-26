@@ -1,0 +1,28 @@
+$selector : '.b-marked-list';
+
+#{$selector} {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  letter-spacing: 0.2px;
+
+  &__item {
+    position: relative;
+    padding-left: 32px;
+
+    &:not(:last-child) {
+      margin-bottom: 15px;
+    }
+
+    &:before {
+      content: '';
+      display: block;
+      width: 18px;
+      height: 2px;
+      background-color: $accent;
+      position: absolute;
+      top: calc(50% - 1px);
+      left: 0;
+    }
+  }
+}

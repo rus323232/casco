@@ -1,0 +1,12 @@
+$selector: '.b-content';
+
+#{$selector} {
+  max-width: $container-width;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+
+  &._full-height {
+    height: 100%;
+  }
+}

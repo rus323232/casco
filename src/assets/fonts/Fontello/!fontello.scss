@@ -1,0 +1,76 @@
+@font-face {
+	font-family: 'fontello';
+	src: url('fontello.eot');
+	src: url('fontello.eot#iefix') format('embedded-opentype'),
+			 url('fontello.woff') format('woff'),
+			 url('fontello.ttf') format('truetype'),
+			 url('fontello.svg#fontello') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+//- Icons-mixin
+@mixin ft-icon($name: '') {
+	content: $name;
+	font-family: "fontello";
+	font-style: normal;
+	font-weight: normal;
+	speak: none;
+
+	display: inline-block;
+	text-decoration: inherit;
+	width: 1em;
+	text-align: center;
+	font-variant: normal;
+	text-transform: none;
+	text-decoration: none;
+
+	line-height: 1em;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+$ft-check: '\e800';
+$ft-rubber: '\e801';
+$ft-right-arrow: '\e802';
+$ft-icon_sport2: '\e803';
+$ft-plus: '\e804';
+$ft-remove: '\e805';
+$ft-save: '\e806';
+$ft-edit: '\e807';
+$ft-question: '\e808';
+$ft-search: '\e809';
+$ft-chat: '\e80a';
+$ft-icon_sport3: '\e80b';
+$ft-icon_option1: '\e80c';
+$ft-icon_option2: '\e80d';
+$ft-icon_option3: '\e80e';
+$ft-icon_sport1: '\e80f';
+$ft-cancel: '\e810';
+$ft-doc: '\e811';
+$ft-small-pencil: '\e812';
+$ft-people: '\e813';
+$ft-person: '\e814';
+$ft-twitter: '\e815';
+$ft-envelope: '\e816';
+$ft-kompas: '\e817';
+$ft-details-link: '\e818';
+$ft-fire-risk: '\e819';
+$ft-flood-risk: '\e81a';
+$ft-theft-risk: '\e81b';
+$ft-arson-risk: '\e81c';
+$ft-blow-risk: '\e81d';
+$ft-disaster-risk: '\e81e';
+$ft-estate: '\e81f';
+$ft-calendar: '\e820';
+$ft-vk: '\e821';
+$ft-fb: '\e822';
+$ft-ok: '\e823';
+$ft-ig: '\f32d';
+$ft-youtube: '\e824';
+$ft-spin4: '\e834';
+$ft-cards: '\e84a';
+$ft-angle-left: '\f104';
+$ft-angle-right: '\f105';
+$ft-angle-up: '\f106';
+$ft-angle-down: '\f107';

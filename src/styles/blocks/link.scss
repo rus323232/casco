@@ -1,0 +1,20 @@
+$selector : '.b-link';
+
+#{$selector} {
+  text-decoration: none;
+  color: $accent;
+
+  &:hover {
+    color: $green;
+  }
+
+  &._pseudo {
+    color: $primary;
+    border-bottom: 1px $accent dotted;
+
+    &:hover {
+      border-bottom: 1px transparent dotted;
+      color: $green;
+    }
+  }
+}

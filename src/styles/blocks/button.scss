@@ -1,0 +1,194 @@
+$selector : '.b-button';
+
+#{$selector} {
+  display: inline-block;
+  font-family: $open-sans-semibold;
+  letter-spacing: rem(0.5);
+  font-size: rem(12);
+  padding-left: 21px;
+  padding-right: 21px;
+  border-radius: 28px;
+  text-transform: uppercase;
+  text-align: center;
+  min-height: 41px;
+  line-height: 40px;
+  overflow: hidden;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  background-color: $white;
+  color: $primary;
+  border: 1px solid $accent;
+
+  &:hover, &:focus {
+    color: $white;
+    background-image: $accent-gradient;
+    background-color: $accent;
+    outline: none;
+    text-decoration: none;
+  }
+
+  &._orange {
+    background-image: $accent-gradient;
+    color: $white;
+    border: 1px solid transparent;
+
+    &:hover, &:focus {
+      color: $primary;
+      background-image: none;
+      border: 1px solid $accent;
+      background-color: transparent;
+      outline: none
+    }
+  }
+
+  &._black {
+    background-color: $black;
+    color: $white;
+    border: 1px solid $white;
+    padding-left: 51px;
+    padding-right: 51px;
+
+    &:hover, &:focus {
+      color: $white;
+      background-color: $black;
+      background-image: none;
+      border: 1px solid $accent;
+      outline: none
+    }
+  }
+
+  &._disabled {
+    cursor: not-allowed;
+    opacity: .6;
+
+    &:hover, &:focus {
+      color: $white;
+      background-image: $accent-gradient;
+      background-color: $accent;
+      outline: none;
+    }
+  }
+
+  &._arrow {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    padding-left: 0;
+    padding-right: 0;
+
+    &:after, &:before {
+      content: '';
+      width: 21px;
+      height: 15px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(180deg);
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+    }
+
+    &:after {
+      background-image: url('/images/arrow.svg');
+    }
+
+    &:before {
+      visibility: hidden;
+      background-image: url('/images/arrow-white.svg');
+    }
+
+    &:hover, &:focus {
+      &:after {
+        visibility: hidden;
+      }
+
+      &:before {
+        visibility: visible;
+      }
+    }
+  }
+
+  &._play, &._pause {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    padding-left: 0;
+    padding-right: 0;
+    background-image: $accent-gradient;
+  }
+  
+  &._play {
+    &:after {
+      @include absolute-center;
+      @include background {
+        background-image: url('/images/btn-play.svg');
+      }
+      left: 54%;
+      content: '';
+      width: 16px;
+      height: 19px;
+      border-top: 0;
+    }
+  }
+  
+  &._pause {
+    &:after {
+      @include absolute-center;
+      @include background {
+        background-image: url('/images/btn-pause.svg');
+      }
+      content: '';
+      width: 13px;
+      height: 17px;
+      border-top: 0;
+    }
+  }
+
+  &._chevron {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    padding-left: 0;
+    padding-right: 0;
+
+    &:after, &:before {
+      content: '';
+      width: 6px;
+      height: 12px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+
+    &:after {
+      background-image: url('/images/chevron.svg');
+    }
+
+    &:before {
+      visibility: hidden;
+      background-image: url('/images/chevron-white.svg');
+    }
+
+    &:hover, &:focus {
+      &:after {
+        visibility: hidden;
+      }
+
+      &:before {
+        visibility: visible;
+      }
+    }
+
+    &._right-direction {
+      &:after, &:before {
+        transform: translate(-50%, -50%) rotate(180deg);
+      }
+    }
+  }
+}

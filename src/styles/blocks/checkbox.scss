@@ -1,0 +1,63 @@
+$selector : '.b-checkbox';
+
+#{$selector} {
+  display: inline-block;
+
+  label {
+    @include flex-row;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+
+    &:before {
+      flex-shrink: 0;
+      display: inline-block;
+      margin-right: 15px;
+      content: '';
+      width: 24px;
+      height: 24px;
+      background-color: transparent;
+      border: 1px $grey-light solid;
+    }
+
+    &:hover {
+      color: $accent;
+      &:before {
+        border: 1px $green solid;
+      }
+    }
+  }
+
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  input[type="checkbox"]:checked + label {
+    &:before {
+      background-color: $green;
+    }
+
+    &:after {
+      position: absolute;
+      content: '';
+      left: 9px;
+      border-style: solid;
+      border-color: #ffffff;
+      border-width: 1px 1px 0 0;
+      display: inline-block;
+      height: 4px;
+      width: 8px;
+      top: calc(50% - 4px);
+      transform: rotate(135deg);
+      vertical-align: top;
+    }
+  }
+
+  &._no-hover {
+    label {
+      &:hover {
+        color: $primary;
+      }
+    }
+  }
+}

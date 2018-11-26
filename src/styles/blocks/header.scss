@@ -1,0 +1,67 @@
+$selector: '.b-header';
+
+#{$selector} {
+  &__top {
+    @include flex-row;
+    align-items: center;
+    height: 58px;
+    background-image: $accent-gradient;
+  }
+
+  &__inner {
+    @include flex-row;
+    align-items: center;
+    height: 100%;
+    justify-content: space-between;
+  }
+
+  &__menu, &__user-menu {
+    height: 100%;
+  }
+
+  &__bottom {
+    @include flex-row;
+    height: 104px;
+    width: 100%;
+    align-items: center;
+    border-bottom: 1px $grey-light solid;
+  }
+
+  &__contacts {
+    @include flex-row;
+    align-items: flex-start;
+  }
+
+  &__logo-holder {
+    display: inline-block;
+    margin-right: 80px;
+  }
+
+  &__logo {
+    display: inline-block;
+    max-width: 270px;
+    width: 318px;
+    height: 47px;
+  }
+
+  &__number {
+    display: inline-block;
+    padding-top: 6px;
+    color: $primary;
+    font-family: $open-sans-semibold;
+    font-size: rem(21);
+    text-transform: uppercase;
+
+    &:not(:last-child) {
+      margin-right: 40px;
+    }
+  }
+
+  &__number-caption {
+    display: block;
+    color: $grey-medium;
+    text-transform: none;
+    font-size: rem(14);
+    font-family: $open-sans;
+  }
+}

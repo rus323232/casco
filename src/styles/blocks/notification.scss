@@ -1,0 +1,6 @@
+$selector : '.b-notification';
+
+#{$selector} {
+  padding: 40px;
+  border: 1px dashed $accent;
+}

@@ -1,0 +1,50 @@
+$selector : '.b-radio';
+
+#{$selector} {
+  label {
+    @include flex-row;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+
+    &:before {
+      display: inline-block;
+      margin-right: 15px;
+      content: '';
+      width: 24px;
+      height: 24px;
+      background-color: transparent;
+      border: 1px $grey-light solid;
+      border-radius: 50%;
+    }
+
+    &:hover {
+      color: $accent;
+      &:before {
+        border: 1px $green solid;
+      }
+    }
+  }
+
+  input[type="radio"] {
+    display: none;
+  }
+
+  input[type="radio"]:checked + label {
+    &:before {
+      background-color: $green;
+    }
+
+    &:after {
+      position: absolute;
+      display: inline-block;
+      content: '';
+      left: 9px;
+      border-radius: 50%;
+      height: 8px;
+      width: 8px;
+      background-color: $white;
+      top: calc(50% - 4px);
+    }
+  }
+}
