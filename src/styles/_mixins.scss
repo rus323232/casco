@@ -129,15 +129,6 @@
   margin-right: auto;
 }
 
-//- Retina bg's
-@mixin bgr($url, $ext) {
-  background-image: url($url+ '.' + $ext);
-
-  @media all and (-webkit-min-device-pixel-ratio: 1.5) {
-    background-image: url($url + '@2x.' + $ext);
-  }
-}
-
 @mixin mtop($val: 20px){
   margin-top: $val;
   &:first-child { margin-top: 0; }

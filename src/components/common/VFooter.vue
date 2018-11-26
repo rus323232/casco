@@ -116,7 +116,7 @@
           <div class="b-footer__cols">
             <div class="b-footer__contacts-col">
               <a class="b-footer__logo" href="/">
-                <img src="@/assets/images/logo-footer.png">
+                <img src="@/assets/images/logo-white.png">
               </a>
             </div>
             <div class="b-footer__contacts-col">
