@@ -1,20 +1,30 @@
 <template>
   <header class="header">
     <div class="header__inner b-content">
-      <div class="header__logo">
+      <a class="header__logo"
+         href="/"
+      >
         <img src="@/assets/images/logo-white.png" alt="Согласие">
-      </div>
+      </a>
       <div class="header__calc-logo">
         <img src="@/assets/images/calc-logo.png" alt="Калькулятор КАСКО">
         <span>Каско</span>
+      </div>
+      <div class="header__steps-container">
+        <v-steps></v-steps>
       </div>
     </div>
   </header>
 </template>
 
 <script>
+import VSteps from './VSteps.vue';
+
 export default {
   name: 'VHeader',
+  components: {
+    VSteps,
+  },
 };
 </script>
 
@@ -48,6 +58,7 @@ export default {
       margin-right: 20px;
     }
   }
+  &__steps-container {}
   &:after {
     background-color: #da721d;
     bottom: 0;
@@ -56,6 +67,13 @@ export default {
     position: absolute;
     right: 0;
     top: 0;
+  }
+}
+@include media-tablet() {
+  .header {
+    &__steps-container {
+      display: none;
+    }
   }
 }
 </style>
