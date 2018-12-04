@@ -62,12 +62,12 @@ export default {
       type: Array,
       required: true,
     },
-    isLastStep: {
-      type: Boolean,
-      default: () => false,
-    },
     hasError: {
       type: Boolean,
+      required: true,
+    },
+    stepsCount: {
+      type: Number,
       required: true,
     },
   },
@@ -100,18 +100,21 @@ export default {
     isStepActive() {
       return this.currentStep >= this.stepNumber;
     },
+    isLastStep() {
+      return this.stepNumber === this.stepsCount - 1;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .step-wrapper {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  @include flex-row;
   width: 100%;
-  height: 100%;
   text-align: left;
+  flex-wrap: nowrap;
+  height: 100%;
+  color: $white;
 
   &._not-active {
     opacity: .4;
@@ -176,11 +179,15 @@ export default {
 .step-title {
   display: block;
   cursor: pointer;
+  padding-left: 6px;
+  letter-spacing: .05em;
+  font-size: rem(12);
+  text-transform: uppercase;
 }
 .progress-container {
   display: block;
   width: calc(100% - 28px);
-  margin-top: 16px;
+  margin-top: 10px;
   float: right;
   z-index: 124;
   position: relative;
@@ -197,6 +204,6 @@ export default {
   position: absolute;
   top: 1px;
   width: 100%;
-  border-bottom: 1px #fff dotted;
+  border-bottom: 1px #fff dashed;
 }
 </style>

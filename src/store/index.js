@@ -1,12 +1,12 @@
-import actions from './actions';
-import state from './state';
-import mutations from './mutations';
-import getters from './getters';
+import Vue from 'vue';
+import Vuex from 'vuex';
+import steps from './modules/steps';
 
-export default {
+Vue.use(Vuex);
+
+export default new Vuex.Store({
   strictMode: true,
-  actions,
-  mutations,
-  getters,
-  state,
-};
+  modules: {
+    steps,
+  },
+});

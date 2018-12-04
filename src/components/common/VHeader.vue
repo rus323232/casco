@@ -30,13 +30,13 @@ export default {
 
 <style lang="scss" scoped>
 .header {
-  height: 99px;
   position: relative;
-  background-color: #e87317;
+  background-color: #ef801c;
+  background-image: linear-gradient(90deg,#ef891c 0,#ef6b1c);
   &__inner {
     @include flex-row;
+    height: 100px;
     align-items: center;
-    height: 100%;
   }
   &__logo {
     width: 200px;
@@ -52,13 +52,20 @@ export default {
     color: $white;
     background-color: #e97f1b;
     padding: 4px;
+    margin-right: 58px;
     img {
       width: 51px;
       height: 64px;
       margin-right: 20px;
     }
   }
-  &__steps-container {}
+  &__steps-container {
+    @include flex-row;
+    flex-wrap: nowrap;
+    height: 100%;
+    width: calc(50% + 113px);
+    z-index: 15;
+  }
   &:after {
     background-color: #da721d;
     bottom: 0;
