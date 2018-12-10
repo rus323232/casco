@@ -1,18 +1,19 @@
-<template lang="pug">
-  component(
-    :is="tag",
-    :class=`{
+<template>
+  <component class="button"
+    :is="tag"
+    :class="{
       [variant]: true,
       '_disabled': disabled,
       '_arrow': arrow
-    }`,
-    :disabled="disabled",
-    :type="type",
-    :href="href",
-    @click="onClick",
+      }"
+    :disabled="disabled"
+    :type="type"
+    :href="href"
+    @click="onClick"
     :onclick="metricaString"
-  ).button
-      slot
+  >
+    <slot></slot>
+  </component>
 </template>
 
 <script>
@@ -77,7 +78,6 @@ export default {
   background-color: $white;
   color: $primary;
   border: 1px solid $accent;
-
   &.orange {
     background-image: $accent-gradient;
     color: $white;
@@ -92,7 +92,6 @@ export default {
       outline: none;
     }
   }
-
   &.transparent {
     background-color: $white;
     color: $primary;
@@ -106,7 +105,6 @@ export default {
       outline: none;
     }
   }
-
   &._disabled {
     cursor: not-allowed;
     opacity: 0.6;
@@ -119,14 +117,12 @@ export default {
       outline: none;
     }
   }
-
   &._arrow {
     position: relative;
     width: 50px;
     height: 50px;
     padding-left: 0;
     padding-right: 0;
-
     &:after {
       content: '';
       width: 21px;
@@ -138,7 +134,7 @@ export default {
       background-repeat: no-repeat;
       background-size: contain;
       background-position: center;
-      background-image: url('@/assets/images/arrow.svg');
+      background-image: url('~@/assets/images/arrow.svg');
     }
   }
 }

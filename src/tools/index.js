@@ -29,8 +29,9 @@ export const groupByLetter = (arrayForGroup = [], groupPropertyName = null) => {
     groupsAcc[letter].push(item);
     return groupsAcc;
   }, {});
-  return Object.keys(groupsHolder).map(key => ({
+  return Object.keys(groupsHolder).map((key, index) => ({
     key,
+    id: index,
     group: groupsHolder[key],
   }));
 };

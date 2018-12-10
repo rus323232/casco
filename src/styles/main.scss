@@ -150,3 +150,7 @@ h3 {
   transition-delay: .5s;
   opacity: 0;
 }
+
+.flip-move {
+  transition: transform 1s;
+}

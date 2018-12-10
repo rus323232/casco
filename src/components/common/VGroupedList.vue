@@ -4,8 +4,8 @@
       {{ errorText }}
     </div>
     <div class="grouped-list__body">
-      <div class="grouped-list__inner">
-        <div
+      <ul class="grouped-list__inner">
+        <li
           class="grouped-list__item"
           v-for="item in sortedItems"
           :key="item.id"
@@ -25,8 +25,8 @@
               </a>
             </li>
           </ul>
-        </div>
-      </div>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -82,6 +82,9 @@ export default {
   &__inner {
     overflow: hidden;
     column-count: 3;
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
   &__item {
     @include flex-row;
@@ -94,11 +97,11 @@ export default {
     }
   }
   &__letter {
+    display: block;
+    padding-top: 3px;
     font-family: $open-sans-bold;
     font-size: rem(24);
     width: 37px;
-    height: 100%;
-    float: left;
     color: $accent;
   }
   &__group-wrapper {
@@ -111,7 +114,7 @@ export default {
     cursor: pointer;
     position: relative;
     font-size: rem(14);
-    line-height: rem(23);
+    line-height: rem(16);
     color: $black;
     border-bottom: 1px $black dashed;
     &:not(:last-child) {

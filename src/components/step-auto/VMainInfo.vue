@@ -1,9 +1,9 @@
 <template>
-  <div class="mark">
+  <div class="main-info">
     <v-smart-search
       placeholder="Введите название автомобиля"
     />
-    <div class="mark__content">
+    <div class="main-info__content">
       <v-tabs-slider
         :tabs="tabs"
         tabs-type="square"
@@ -15,12 +15,15 @@
       >
         <div slot="slide-1">
           <v-grouped-list
+            class="main-info__brand"
             :error-text="brandError"
             :items="carsBrands"
           />
-          <button @click="toggleCarsList">
-            {{ showOnlyPopular ? 'Показать все марки' : 'Показать популярные марки' }}
-          </button>
+          <div class="main-info__centered-content">
+            <v-button @click="toggleCarsList">
+              {{ showOnlyPopular ? 'Показать все марки' : 'Показать популярные марки' }}
+            </v-button>
+          </div>
         </div>
         <div slot="slide-2">
           <v-grouped-list
@@ -36,12 +39,14 @@
 import VGroupedList from '../common/VGroupedList.vue';
 import VSmartSearch from '../common/VSmartSearch.vue';
 import VTabsSlider from '../ui/VTabsSlider.vue';
+import VButton from '../ui/VButton.vue';
 
 export default {
   components: {
     VGroupedList,
     VSmartSearch,
     VTabsSlider,
+    VButton,
   },
   props: {
     cars: {
@@ -99,10 +104,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.mark {
+.main-info {
   width: 100%;
   &__content {
     padding: 44px 81px 64px 81px;
+  }
+  &__brand {
+    margin-bottom: 40px;
+  }
+  &__centered-content {
+    text-align: center;
   }
 }
 </style>
