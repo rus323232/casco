@@ -64,6 +64,44 @@ h3 {
   font-size: rem(22);
 }
 
+.link {
+  color: $accent;
+  font-size: rem(16);
+  font-weight: 600;
+  line-height: 24px;
+  cursor: pointer;
+  &._bold {
+    font-family: $open-sans-semibold;
+  }
+  &._uppercase {
+    text-transform: uppercase;
+  }
+  &._underline {
+    display: inline-block;
+    position: relative;
+    &:after {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      content: '';
+      height: 1px;
+      width: 100%;
+      border-bottom: 1px dashed $accent;
+    }
+  }
+  &._small {
+    font-size: rem(14);
+  }
+  &:hover {
+    color: $grey;
+    &._underline {
+      &:after {
+        border-bottom: 1px dashed $grey;
+      }
+    }
+  }
+}
+
 #app {
   position: relative;
 }

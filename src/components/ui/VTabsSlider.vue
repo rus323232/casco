@@ -1,7 +1,12 @@
 <template>
 <div class="tabs-slider">
-  <div class="tabs-slider__tabs-wrapper">
-    <v-tabs
+  <div class="tabs-slider__tabs-wrapper"
+       :class="{
+        [customClass]: true,
+       }"
+  >
+    <component
+      :is="`v-tabs-${tabsType.toLowerCase()}`"
       class="tabs-slider__tabs"
       :items="tabs"
       :active-slide="currentTabIndex"
@@ -27,20 +32,30 @@
     </carousel>
   </div>
 </div>
-
 </template>
 
 <script>
-import VTabs from './VTabs.vue';
+import VTabsRounded from './VTabsRounded.vue';
+import VTabsSquare from './VTabsSquare.vue';
 
 export default {
   components: {
-    VTabs,
+    VTabsRounded,
+    VTabsSquare,
   },
   props: {
     tabs: {
       type: Array,
       required: true,
+    },
+    tabsType: {
+      type: String,
+      default: 'rounded',
+      validator: value => ['rounded', 'square'].includes(value.toLowerCase()),
+    },
+    customClass: {
+      type: String,
+      default: '',
     },
   },
   data() {
@@ -77,6 +92,9 @@ export default {
   &__tabs-wrapper {
     @include flex-row;
     justify-content: center;
+  }
+  &__body {
+    padding: 50px 0;
   }
 }
 </style>

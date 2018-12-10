@@ -14,61 +14,55 @@
 </template>
 
 <script>
+import tabsMixin from '../../mixins/tabs';
+
 export default {
-  props: {
-    items: {
-      type: Array,
-      required: true,
-    },
-    activeSlide: {
-      type: Number,
-      default: 0,
-    },
-  },
+  mixins: [
+    tabsMixin,
+  ],
 };
 </script>
 
 <style lang="scss" scoped>
 .tabs {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   width: auto;
   align-items: center;
-  height: 61px;
-  border: 1px $grey-lighter solid;
-  border-radius: 100px;
+  height: 50px;
   font-family: $open-sans-bold;
+  font-size: rem(16);
 
   &__item {
     @include flex-row;
-    align-items: center;
-    justify-content: center;
     position: relative;
-    padding: 0 36px;
-    font-size: rem(16);
-    width: 100%;
-    max-width: 400px;
-    height: 100%;
-    text-align: center;
-    color: $grey;
     cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-width: 200px;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 100%;
+    border: 1px solid $grey-light;
+    background-color: #f2f2f2;
+    color: $grey;
 
     &._active {
+      background-color: $white;
+      border: none;
       &:after {
         content: '';
+        display: block;
         position: absolute;
         top: 0;
-        left: -1px;
-        width: calc(100% + 2px);
-        height: 100%;
-        z-index: -5;
-        display: block;
-        border-radius: 100px;
-        border: 1px $accent solid;
-        background-color: transparent;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background-color: $accent;
       }
-      color: $accent;
+      color: $black;
     }
   }
 }

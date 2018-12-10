@@ -6,4 +6,7 @@ export default {
     }
     return stepsMap[0];
   },
+  currentSubStepName(state, getters) {
+    return getters.currentStepObject.subSteps[state.currentStep];
+  },
 };
