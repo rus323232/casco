@@ -3,7 +3,7 @@
   <v-tabs-slider
     :tabs="tabs"
   >
-    <div slot="slide-1">
+    <div class="main-info-block__slide" slot="slide-1">
       <p class="main-info-block__bold-text">
         Наличие автомобиля всегда связано с рисками, к которым нужно быть готовым.
       </p>
@@ -24,7 +24,7 @@
         И в этом поможет <a class="link _uppercase _underline">онлайн-калькулятор каско</a>
       </div>
     </div>
-    <div slot="slide-2">
+    <div class="main-info-block__slide" slot="slide-2">
       <p class="main-info-block__paragraph">
         Расчет стоимости каско зависит от большого числа факторов:
       </p>
@@ -59,8 +59,12 @@ export default {
   data() {
     return {
       tabs: [
-        'Зачем нужно страховать КАСКО?',
-        'Факторы, влияющие на стоимость КАСКО',
+        {
+          title: 'Зачем нужно страховать КАСКО?',
+        },
+        {
+          title: 'Факторы, влияющие на стоимость КАСКО',
+        },
       ],
     };
   },

@@ -5,14 +5,17 @@
     />
     <div class="mark__content">
       <v-tabs-slider
-        :tabs="[
-          'Марка',
-          'Модель',
-        ]"
+        :tabs="tabs"
         tabs-type="square"
+        :body-styles="{
+          padding: '0px 0px',
+        }"
+        :mouseDrag="false"
+        @selectDisabledTab="onSelectDisabledTab"
       >
         <div slot="slide-1">
           <v-grouped-list
+            :error-text="brandError"
             :items="carsBrands"
           />
           <button @click="toggleCarsList">
@@ -49,11 +52,15 @@ export default {
     return {
       showOnlyPopular: true,
       selectedBrand: '',
+      brandError: '',
     };
   },
   methods: {
     toggleCarsList() {
       this.showOnlyPopular = !this.showOnlyPopular;
+    },
+    onSelectDisabledTab() {
+      this.brandError = 'Сначала выберете марку';
     },
   },
   computed: {
@@ -75,6 +82,17 @@ export default {
         return '';
       }
       return [];
+    },
+    tabs() {
+      return [
+        {
+          title: 'Марка',
+        },
+        {
+          title: 'Модель',
+          disabled: true,
+        },
+      ];
     },
   },
 };

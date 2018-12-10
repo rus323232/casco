@@ -1,37 +1,38 @@
 <template>
-<div class="tabs-slider">
-  <div class="tabs-slider__tabs-wrapper"
-       :class="{
-        [customClass]: true,
-       }"
-  >
-    <component
-      :is="`v-tabs-${tabsType.toLowerCase()}`"
-      class="tabs-slider__tabs"
-      :items="tabs"
-      :active-slide="currentTabIndex"
-      @tabSelect="showTab"
-    />
-  </div>
-  <div class="tabs-slider__body">
-    <carousel
-      :per-page="1"
-      :adjustableHeight="true"
-      :paginationEnabled="false"
-      ref="tabsCarousel"
-      @input="onPageChange"
+  <div class="tabs-slider">
+    <div class="tabs-slider__tabs-wrapper"
+         :class="{
+          [customClass]: true,
+         }"
     >
-      <slide
-        class="tabs-slider__slide"
-        v-for="(slotName, index) of getSlotsNames()"
-        :key="slotName.id"
-        :data-index="index"
+      <component
+        :is="`v-tabs-${tabsType.toLowerCase()}`"
+        class="tabs-slider__tabs"
+        :items="tabsTitles"
+        :active-slide="currentTabIndex"
+        @tabSelect="showTab"
+      />
+    </div>
+    <div class="tabs-slider__body" :style="bodyStyles">
+      <carousel
+        :per-page="1"
+        :adjustableHeight="true"
+        :paginationEnabled="false"
+        :mouseDrag="mouseDrag"
+        ref="tabsCarousel"
+        @input="onPageChange"
       >
-        <slot :name="slotName"></slot>
-      </slide>
-    </carousel>
+        <slide
+          class="tabs-slider__slide"
+          v-for="(slotName, index) of getSlotsNames()"
+          :key="slotName.id"
+          :data-index="index"
+        >
+          <slot :name="slotName"></slot>
+        </slide>
+      </carousel>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -47,6 +48,7 @@ export default {
     tabs: {
       type: Array,
       required: true,
+      validator: value => value.every(tab => typeof tab.title === 'string'),
     },
     tabsType: {
       type: String,
@@ -56,6 +58,14 @@ export default {
     customClass: {
       type: String,
       default: '',
+    },
+    mouseDrag: {
+      type: Boolean,
+      default: false,
+    },
+    bodyStyles: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -68,8 +78,12 @@ export default {
       return Object.keys(this.$slots).filter(slotName => /slide-*/ig.test(slotName));
     },
     showTab(tabIndex) {
-      this.carousel.goToPage(tabIndex);
-      this.currentTabIndex = tabIndex;
+      if (!this.tabs[tabIndex].disabled) {
+        this.carousel.goToPage(tabIndex);
+        this.currentTabIndex = tabIndex;
+      } else {
+        this.$emit('selectDisabledTab');
+      }
     },
     onPageChange(pageIndex) {
       this.currentTabIndex = pageIndex;
@@ -78,6 +92,9 @@ export default {
   computed: {
     carousel() {
       return this.$refs.tabsCarousel;
+    },
+    tabsTitles() {
+      return Object.keys(this.tabs).map(key => this.tabs[key].title);
     },
   },
 };

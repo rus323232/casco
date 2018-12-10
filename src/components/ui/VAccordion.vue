@@ -5,7 +5,7 @@
          ref="item"
          :key="index"
     >
-      <slot :name="item"/>
+      <slot :name="item" />
     </div>
   </div>
 </template>
@@ -20,7 +20,8 @@ export default {
   },
   data: () => ({
     itemDefaultHeight: '100px',
-    itemDOMElement: {},
+    currentItemIndex: 0,
+    mutationObserver: {},
   }),
   methods: {
     getSlotsNames() {
@@ -48,13 +49,14 @@ export default {
       }
     },
     setDefaultHeight() {
-      this.itemDOMElement.style.height = this.itemDefaultHeight;
+      this.itemDOMElement.style.maxHeight = this.itemDefaultHeight;
     },
     setExpandHeight() {
-      this.itemDOMElement.style.height = `${this.itemDOMElement.scrollHeight + 20}px`;
+      this.itemDOMElement.style.maxHeight = '9999px';
     },
     toggleContent(index) {
-      this.itemDOMElement = this.$refs.item[index];
+      this.currentItemIndex = index;
+      if (!this.itemDOMElement) return;
       if (this.hasClass('_open')) {
         this.removeClass('_open');
         this.setDefaultHeight();
@@ -62,6 +64,15 @@ export default {
         this.addClass('_open');
         this.setExpandHeight();
       }
+    },
+  },
+  computed: {
+    itemDOMElement() {
+      const curIndex = this.currentItemIndex;
+      if (curIndex in this.$refs.item) {
+        return this.$refs.item[curIndex];
+      }
+      return null;
     },
   },
   watch: {
@@ -75,7 +86,7 @@ export default {
     },
   },
   mounted() {
-    this.$nextTick(() => {
+    this.$nextTick().then(() => {
       if (this.toggleElementByIndex !== null) {
         this.toggleContent(this.toggleElementByIndex);
       }
@@ -89,9 +100,9 @@ $selector : '.accordion';
 
 #{$selector} {
   &__item {
-    height: 100px;
+    max-height: 100px;
     overflow: hidden;
-    transition: height .3s ease;
+    transition: max-height .5s ease;
     box-shadow: 0 10px 50px rgba(212, 188, 176, 0.5);
     background-color: #ffffff;
   }
