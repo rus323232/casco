@@ -13,13 +13,16 @@
       >
         <div slot="slide-1">
           <v-grouped-list
-            :items="carsList"
+            :items="carsBrands"
           />
           <button @click="toggleCarsList">
             {{ showOnlyPopular ? 'Показать все марки' : 'Показать популярные марки' }}
           </button>
         </div>
         <div slot="slide-2">
+          <v-grouped-list
+            :items="carsModels"
+          />
         </div>
       </v-tabs-slider>
     </div>
@@ -39,12 +42,13 @@ export default {
   },
   props: {
     cars: {
-      type: Array,
+      type: Object,
     },
   },
   data() {
     return {
       showOnlyPopular: true,
+      selectedBrand: '',
     };
   },
   methods: {
@@ -55,8 +59,22 @@ export default {
   computed: {
     carsList() {
       return this.showOnlyPopular
-        ? this.cars.filter(car => car.UF_POPULAR !== '0')
-        : this.cars;
+        ? this.cars.popular
+        : this.cars.all;
+    },
+    carsBrands() {
+      return this.carsList.reduce((carsBrands, car) => {
+        if (!carsBrands.includes(car.UF_BRAND)) {
+          carsBrands.push(car.UF_BRAND);
+        }
+        return carsBrands;
+      }, []);
+    },
+    carsModels() {
+      if (this.selectedBrand) {
+        return '';
+      }
+      return [];
     },
   },
 };

@@ -9,7 +9,10 @@ export default {
     }
     return true;
   },
-  setCarsCollection(state, carsCollection) {
-    state.carsCollection = carsCollection;
+  setCarsCollection(state, { popular, all }) {
+    state.carsCollection = {
+      popular,
+      all,
+    };
   },
 };

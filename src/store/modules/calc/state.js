@@ -1,5 +1,8 @@
 export default {
-  carsCollection: [],
+  carsCollection: {
+    all: [],
+    popular: [],
+  },
   useIndividualCalculation: false,
   useScoring: false,
   autoData: {},
