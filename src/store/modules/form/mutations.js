@@ -1,3 +1,5 @@
+import { updateField } from 'vuex-map-fields';
+
 export default {
   setStateData(state, { key = null, newData = {} }) {
     if (!state[key]) return false;
@@ -9,10 +11,5 @@ export default {
     }
     return true;
   },
-  setCarsCollection(state, { popular, all }) {
-    state.carsCollection = {
-      popular,
-      all,
-    };
-  },
+  updateField,
 };

@@ -7,7 +7,7 @@
       <ul class="grouped-list__inner">
         <li
           class="grouped-list__item"
-          v-for="item in sortedItems"
+          v-for="item of sortedItems"
           :key="item.id"
         >
           <span class="grouped-list__letter">
@@ -15,14 +15,15 @@
           </span>
           <ul class="grouped-list__group-wrapper">
             <li
-              v-for="itemValue in item.group"
+              v-for="(itemValue, itemIndex) of item.group"
               :key="itemValue.id"
             >
-              <a
-                class="grouped-list__caption"
-              >
-                {{ itemValue }}
-              </a>
+              <v-grouped-list-item
+                :selected="itemValue === selectedItem"
+                :text="itemValue"
+                @click="selectItem(itemValue)"
+                @unselect="unSelectItem(itemIndex)"
+              />
             </li>
           </ul>
         </li>
@@ -36,8 +37,12 @@ import {
   sortArrayOfObjectByAlphabet,
   groupByLetter,
 } from '@/tools';
+import VGroupedListItem from './VGroupedListItem.vue';
 
 export default {
+  components: {
+    VGroupedListItem,
+  },
   props: {
     items: {
       type: Array,
@@ -55,8 +60,18 @@ export default {
       type: String,
       default: '',
     },
+    selectedItem: {
+      type: [String, Object],
+    },
   },
-  methods: {},
+  methods: {
+    selectItem(item) {
+      this.$emit('select', item);
+    },
+    unSelectItem(itemIndex) {
+      this.$emit('unselect', itemIndex);
+    },
+  },
   computed: {
     sortedItems() {
       return this.splitByAlphabet
@@ -80,7 +95,6 @@ export default {
     height: 40px;
   }
   &__inner {
-    overflow: hidden;
     column-count: 3;
     list-style: none;
     margin: 0;
@@ -98,37 +112,19 @@ export default {
   }
   &__letter {
     display: block;
-    padding-top: 3px;
+    padding-top: 5px;
     font-family: $open-sans-bold;
     font-size: rem(24);
-    width: 37px;
+    width: 23px;
     color: $accent;
   }
   &__group-wrapper {
     list-style: none;
     margin: 0;
     padding: 0;
-  }
-  &__caption {
-    display: inline-block;
-    cursor: pointer;
-    position: relative;
-    font-size: rem(14);
-    line-height: rem(16);
-    color: $black;
-    border-bottom: 1px $black dashed;
-    &:not(:last-child) {
-      margin-bottom: 5px;
-    }
-    &:hover {
-      color: $accent;
-      border-bottom: 1px $accent dashed;
-    }
-    &._disabled {
-      cursor: not-allowed;
-      opacity: .6;
-      &:hover {
-        color: $grey;
+    li {
+      &:not(:last-child) {
+        margin-bottom: 5px;
       }
     }
   }

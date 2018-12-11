@@ -10,4 +10,10 @@ export default {
   setLoaderState(state, loaderState = false) {
     state.showLoaderManually = loaderState;
   },
+  setCarsCollection(state, { popular, all }) {
+    state.carsCollection = {
+      popular,
+      all,
+    };
+  },
 };

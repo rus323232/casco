@@ -18,9 +18,12 @@
             class="main-info__brand"
             :error-text="brandError"
             :items="carsBrands"
+            :selected-item="selectedBrand"
+            @select="onBrandSelect"
+            @unselect="onBrandUnSelect"
           />
           <div class="main-info__centered-content">
-            <v-button @click="toggleCarsList">
+            <v-button variant="transparent" @click="toggleCarsList">
               {{ showOnlyPopular ? 'Показать все марки' : 'Показать популярные марки' }}
             </v-button>
           </div>
@@ -28,6 +31,7 @@
         <div slot="slide-2">
           <v-grouped-list
             :items="carsModels"
+            @select="f=>f"
           />
         </div>
       </v-tabs-slider>
@@ -36,6 +40,7 @@
 </template>
 
 <script>
+import { mapFields } from 'vuex-map-fields';
 import VGroupedList from '../common/VGroupedList.vue';
 import VSmartSearch from '../common/VSmartSearch.vue';
 import VTabsSlider from '../ui/VTabsSlider.vue';
@@ -56,7 +61,6 @@ export default {
   data() {
     return {
       showOnlyPopular: true,
-      selectedBrand: '',
       brandError: '',
     };
   },
@@ -65,10 +69,21 @@ export default {
       this.showOnlyPopular = !this.showOnlyPopular;
     },
     onSelectDisabledTab() {
-      this.brandError = 'Сначала выберете марку';
+      this.brandError = 'Сначала выберите марку';
+    },
+    onBrandSelect(brand) {
+      if (this.carsBrands.includes(brand)) {
+        this.selectedBrand = brand;
+      }
+    },
+    onBrandUnSelect() {
+      this.selectedBrand = '';
     },
   },
   computed: {
+    ...mapFields('form', {
+      selectedBrand: 'autoData.brand',
+    }),
     carsList() {
       return this.showOnlyPopular
         ? this.cars.popular
@@ -84,7 +99,7 @@ export default {
     },
     carsModels() {
       if (this.selectedBrand) {
-        return '';
+        return [];
       }
       return [];
     },

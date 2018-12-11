@@ -9,6 +9,7 @@
     :disabled="disabled"
     :type="type"
     :href="href"
+    :styles="styles"
     @click="onClick"
     :onclick="metricaString"
   >
@@ -44,6 +45,10 @@ export default {
       type: String,
       default: f => f,
     },
+    styles: {
+      type: Object,
+      default: () => {},
+    },
   },
   methods: {
     onClick(e) {
@@ -61,16 +66,16 @@ export default {
 <style lang="scss" scoped>
 .button {
   display: inline-block;
-  font-family: $open-sans-bold;
+  font-family: $open-sans;
   letter-spacing: rem(0.5);
   font-size: rem(12);
-  padding-left: 40px;
-  padding-right: 40px;
+  padding-left: 33px;
+  padding-right: 33px;
   border-radius: 28px;
   text-transform: uppercase;
   text-align: center;
-  min-height: 40px;
-  line-height: 40px;
+  min-height: 54px;
+  line-height: 54px;
   overflow: hidden;
   text-decoration: none;
   text-overflow: ellipsis;

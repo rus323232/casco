@@ -26,12 +26,10 @@
 
 <script>
 import {
-  createNamespacedHelpers,
+  mapState as mapGlobalState,
 } from 'vuex';
 import VAccordion from '../components/ui/VAccordion.vue';
 import VMainInfo from '../components/step-auto/VMainInfo.vue';
-
-const { mapState } = createNamespacedHelpers('calc');
 
 export default {
   components: {
@@ -39,7 +37,7 @@ export default {
     VMainInfo,
   },
   computed: {
-    ...mapState({
+    ...mapGlobalState({
       carsCollection: state => state.carsCollection,
     }),
   },

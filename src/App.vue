@@ -21,7 +21,7 @@
 
 <script>
 import {
-  createNamespacedHelpers,
+  mapActions,
 } from 'vuex';
 import VFooter from './components/common/VFooter.vue';
 import VHeader from './components/common/VHeader.vue';
@@ -31,8 +31,6 @@ import VMainInfoBlock from './components/common/VMainInfoBlock.vue';
 import VBottomInfoBlock from './components/common/VBottomInfoBlock.vue';
 import VLoader from './components/common/VLoader.vue';
 import VMainTitle from './components/ui/VMainTitle.vue';
-
-const { mapActions } = createNamespacedHelpers('calc');
 
 export default {
   components: {

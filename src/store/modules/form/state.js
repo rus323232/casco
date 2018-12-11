@@ -1,11 +1,9 @@
 export default {
-  carsCollection: {
-    all: [],
-    popular: [],
-  },
   useIndividualCalculation: false,
   useScoring: false,
-  autoData: {},
+  autoData: {
+    brand: '',
+  },
   driversData: {},
-  paramsData: {},
+  programsData: {},
 };
