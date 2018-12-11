@@ -1,5 +1,14 @@
 <template>
   <div class="smart-search">
+    <v-autocomplete :items="items"
+                    :value="value"
+                    :get-label="getLabel"
+                    :component-item='template'
+                    :min-len="2"
+                    :keep-open="true"
+                    @update-items="updateItems"
+    >
+    </v-autocomplete>
     <div class="smart-search__search-icon">
       <icon-search />
     </div>
@@ -19,17 +28,39 @@
 <script>
 import IconSearch from '../icons/IconSearch.vue';
 import IconClose from '../icons/IconClose.vue';
+import VSmartSearchItem from './VSmartSearchItem.vue';
 
 export default {
+  components: {
+    IconSearch,
+    IconClose,
+  },
   props: {
+    value: {
+      type: [Object, Array, String],
+      required: true,
+    },
+    cars: {
+      type: Array,
+      required: true,
+    },
     placeholder: {
       type: String,
       default: '',
     },
   },
-  components: {
-    IconSearch,
-    IconClose,
+  data() {
+    return {
+      template: VSmartSearchItem,
+      items: this.cars,
+    };
+  },
+  methods: {
+    getLabel(item) {
+      return item.UF_BRAND;
+    },
+    updateItems(test) {
+    },
   },
 };
 </script>

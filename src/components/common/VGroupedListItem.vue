@@ -55,11 +55,15 @@ $selector: '.grouped-list-item ';
   display: inline-block;
   cursor: pointer;
   position: relative;
-  padding: 5px 15px;
+  padding: 10px 0 10px 15px;
   line-height: rem(16);
   border: 1px solid transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   &__icon-holder {
-    margin-left: 10px;
+    padding-left: 10px;
+    padding-right: 15px;
   }
   &__text {
     font-size: rem(14);
@@ -79,7 +83,6 @@ $selector: '.grouped-list-item ';
     }
   }
   &._selected {
-    display: block;
     border-radius: 100px;
     border: 1px solid $accent;
     #{$selector} {

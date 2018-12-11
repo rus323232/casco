@@ -4,7 +4,7 @@
       {{ errorText }}
     </div>
     <div class="grouped-list__body">
-      <ul class="grouped-list__inner">
+      <ul v-if="splitByAlphabet" class="grouped-list__inner">
         <li
           class="grouped-list__item"
           v-for="item of sortedItems"
@@ -26,6 +26,20 @@
               />
             </li>
           </ul>
+        </li>
+      </ul>
+      <ul v-else class="grouped-list__inner _without-splitting">
+        <li
+          class="grouped-list__item _inline"
+          v-for="(item, index) of items"
+          :key="item.id"
+        >
+          <v-grouped-list-item
+            :selected="item[keyForSort] === selectedItem[keyForSort]"
+            :text="item[keyForText]"
+            @click="selectItem(item)"
+            @unselect="unSelectItem(index)"
+          />
         </li>
       </ul>
     </div>
@@ -57,6 +71,10 @@ export default {
       default: true,
     },
     keyForSort: {
+      type: String,
+      default: '',
+    },
+    keyForText: {
       type: String,
       default: '',
     },
@@ -99,15 +117,24 @@ export default {
     list-style: none;
     margin: 0;
     padding: 0;
+    overflow: hidden;
+    &._without-splitting {
+      column-count: 5;
+    }
   }
   &__item {
-    @include flex-row;
+    display: inline-flex;
+    flex-direction: row;
     align-items: flex-start;
     width: 100%;
     margin-bottom: 30px;
 
     &._no-margin {
       margin: 0;
+    }
+
+    &._inline {
+      display: inline-block;
     }
   }
   &__letter {
@@ -123,6 +150,7 @@ export default {
     margin: 0;
     padding: 0;
     li {
+      height: 28px;
       &:not(:last-child) {
         margin-bottom: 5px;
       }

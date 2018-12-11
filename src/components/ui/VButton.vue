@@ -87,9 +87,7 @@ export default {
     background-image: $accent-gradient;
     color: $white;
     border: 1px solid transparent;
-
-    &:hover,
-    &:focus {
+    &:hover {
       color: $primary;
       background-image: none;
       border: 1px solid $accent;
@@ -102,8 +100,7 @@ export default {
     color: $primary;
     border: 1px solid $accent;
 
-    &:hover,
-    &:focus {
+    &:hover {
       color: $white;
       background-image: $accent-gradient;
       background-color: $accent;
@@ -113,9 +110,7 @@ export default {
   &._disabled {
     cursor: not-allowed;
     opacity: 0.6;
-
-    &:hover,
-    &:focus {
+    &:hover {
       color: $white;
       background-image: $accent-gradient;
       background-color: $accent;
@@ -141,6 +136,9 @@ export default {
       background-position: center;
       background-image: url('~@/assets/images/arrow.svg');
     }
+  }
+  &:focus {
+    outline: none;
   }
 }
 </style>

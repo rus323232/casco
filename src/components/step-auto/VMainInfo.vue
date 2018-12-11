@@ -1,22 +1,26 @@
 <template>
   <div class="main-info">
     <v-smart-search
+      :cars="cars.all"
+      :value="selectedModel"
       placeholder="Введите название автомобиля"
+      @input="onSmartSearchInput"
     />
     <div class="main-info__content">
       <v-tabs-slider
         :tabs="tabs"
-        tabs-type="square"
         :body-styles="{
           padding: '0px 0px',
         }"
         :mouseDrag="false"
+        tabs-type="square"
+        ref="slider"
         @selectDisabledTab="onSelectDisabledTab"
       >
         <div slot="slide-1">
           <v-grouped-list
             class="main-info__brand"
-            :error-text="brandError"
+            :error-text="errorText"
             :items="carsBrands"
             :selected-item="selectedBrand"
             @select="onBrandSelect"
@@ -31,7 +35,12 @@
         <div slot="slide-2">
           <v-grouped-list
             :items="carsModels"
-            @select="f=>f"
+            :splitByAlphabet="false"
+            :selected-item="selectedModel"
+            key-for-sort="ID"
+            key-for-text="UF_MODEL"
+            @select="onModelSelect"
+            @unselect="onModelUnSelect"
           />
         </div>
       </v-tabs-slider>
@@ -61,7 +70,7 @@ export default {
   data() {
     return {
       showOnlyPopular: true,
-      brandError: '',
+      showError: false,
     };
   },
   methods: {
@@ -69,21 +78,57 @@ export default {
       this.showOnlyPopular = !this.showOnlyPopular;
     },
     onSelectDisabledTab() {
-      this.brandError = 'Сначала выберите марку';
+      this.showError = true;
     },
     onBrandSelect(brand) {
       if (this.carsBrands.includes(brand)) {
         this.selectedBrand = brand;
+        this.$nextTick().then(() => {
+          this.slider.showTab(1);
+        });
       }
     },
     onBrandUnSelect() {
       this.selectedBrand = '';
+      this.showError = false;
+    },
+    onModelSelect(model) {
+      this.selectedModel = {
+        ...model,
+      };
+    },
+    onModelUnSelect() {
+      const { selectedModel } = this;
+      this.selectedModel = {
+        ...Object.keys(selectedModel).map(key => ({ [key]: '' })),
+      };
+    },
+    onSmartSearchInput(newValue) {
+      if (!newValue) return;
+      this.selectedBrand = newValue.UF_BRAND;
+      this.selectedModel = {
+        ...Object.keys(newValue).reduce((acc, key) => {
+          if (key in this.selectedModel) {
+            acc[key] = newValue[key];
+          }
+          return acc;
+        }, {}),
+      };
     },
   },
   computed: {
     ...mapFields('form', {
       selectedBrand: 'autoData.brand',
+      selectedModel: 'autoData.model',
     }),
+    errorText() {
+      return (this.showError && !this.selectedBrand)
+        ? 'Сначала выберите марку'
+        : '';
+    },
+    isBrandSelect() {
+      return this.selectedBrand !== '';
+    },
     carsList() {
       return this.showOnlyPopular
         ? this.cars.popular
@@ -98,10 +143,10 @@ export default {
       }, []);
     },
     carsModels() {
-      if (this.selectedBrand) {
+      if (!this.selectedBrand) {
         return [];
       }
-      return [];
+      return this.cars.all.filter(car => car.UF_BRAND === this.selectedBrand);
     },
     tabs() {
       return [
@@ -110,9 +155,12 @@ export default {
         },
         {
           title: 'Модель',
-          disabled: true,
+          disabled: this.selectedBrand === '',
         },
       ];
+    },
+    slider() {
+      return this.$refs.slider;
     },
   },
 };
@@ -122,7 +170,7 @@ export default {
 .main-info {
   width: 100%;
   &__content {
-    padding: 44px 81px 64px 81px;
+    padding: 44px 0 64px 0;
   }
   &__brand {
     margin-bottom: 40px;
