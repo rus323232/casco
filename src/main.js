@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import axios from 'axios';
-import Autocomplete from 'v-autocomplete';
+import Vuebar from 'vuebar';
 import VueCarousel from 'vue-carousel';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 
-Vue.use(Autocomplete);
+Vue.use(Vuebar);
 Vue.use(VueCarousel);
 Vue.$axios = axios;
 Object.defineProperty(Vue.prototype, '$axios', {

@@ -1,34 +1,58 @@
 <template>
   <div class="smart-search">
-    <v-autocomplete :items="items"
-                    :value="value"
-                    :get-label="getLabel"
-                    :component-item='template'
-                    :min-len="2"
-                    :keep-open="true"
-                    @update-items="updateItems"
-    >
-    </v-autocomplete>
-    <div class="smart-search__search-icon">
-      <icon-search />
+    <div class="smart-search__input-wrapper">
+      <label class="smart-search__label">
+        <input type="text"
+               class="smart-search__input"
+               v-model="searchText"
+               @focus="showItems"
+               @blur="onBlur"
+               @keydown="keyDown"
+        />
+      </label>
+      <div class="smart-search__search-icon">
+        <icon-search />
+      </div>
+      <button class="smart-search__clear-btn">
+        <icon-close />
+      </button>
     </div>
-    <button class="smart-search__clear-btn">
-      <icon-close />
-    </button>
-    <label class="smart-search__label">
-      <input
-        class="smart-search__input"
-        type="text"
-        :placeholder="placeholder"
-      >
-    </label>
+    <div class="smart-search__items-wrapper"
+         :style="{
+            maxHeight: containerMaxHeight,
+         }"
+    >
+      <div class="smart-search__bar-content" v-bar>
+        <ul class="smart-search__items"
+            ref="scrollbar"
+            :style="{
+              maxHeight: itemsContainerMaxHeight,
+            }"
+        >
+          <li class="smart-search__item"
+              :class="{
+                '_active': index === focusIndex,
+              }"
+              :style="{
+                minHeight: `${itemMinHeight}px`,
+              }"
+              v-for="(item, index) of items"
+              :key="item.id"
+          >
+            <span v-html="HTMLContent(item)"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import EngToRusKeyMap from '@/maps/EngToRusKeyMap';
+import RusToEngKeyMap from '@/maps/RusToEngKeyMap';
+import TranslitKeyMap from '@/maps/TranslitKeyMap';
 import IconSearch from '../icons/IconSearch.vue';
 import IconClose from '../icons/IconClose.vue';
-import VSmartSearchItem from './VSmartSearchItem.vue';
 
 export default {
   components: {
@@ -48,28 +72,230 @@ export default {
       type: String,
       default: '',
     },
+    initialText: {
+      type: String,
+      default: '',
+    },
+    itemMinHeight: {
+      type: Number,
+      default: 48,
+    },
+    itemsContainerMaxHeight: {
+      type: Number,
+      default: 400,
+    },
+    maxCharsTrigger: {
+      type: Number,
+      default: 2,
+    },
   },
   data() {
     return {
-      template: VSmartSearchItem,
-      items: this.cars,
+      items: [],
+      searchText: this.initialText,
+      showList: false,
+      focusIndex: -1, // индекс активного элемента списка
+      searchTimeOut: {}, // таймаут запроса после смены строки поиска
     };
   },
   methods: {
-    getLabel(item) {
-      return item.UF_BRAND;
+    onBlur() {
+      //this.showList = false;
     },
-    updateItems(test) {
+    showItems() {
+      this.showList = true;
+      if (this.items.length && this.searchText) {
+        this.showList = true;
+      }
+    },
+    keyDown(e) {
+      const { scrollContainerTo } = this;
+      const key = e.keyCode;
+      // Disable when list isn't showing up
+      if (!this.showList) return;
+
+      switch (key) {
+        case 40: // down
+          this.focusIndex += 1;
+          scrollContainerTo('down');
+          break;
+        case 38: // up
+          this.focusIndex -= 1;
+          scrollContainerTo('up');
+          break;
+        case 13: // enter
+          //this.selectList(this.items[this.focusIndex]);
+          this.showList = false;
+          break;
+        case 27: // esc
+          this.showList = false;
+          break;
+        default:
+          this.showList = false;
+      }
+      // When cursor out of range
+      const lastItemIndex = this.items.length - 1;
+      if (this.focusIndex > lastItemIndex) {
+        this.focusIndex = 0;
+        scrollContainerTo('start');
+      } else if (this.focusIndex < 0) {
+        this.focusIndex = lastItemIndex;
+        scrollContainerTo('end');
+      }
+    },
+    /**
+     * @return {string}
+     */
+    HTMLContent(option) {
+      const stringValue = `${option.UF_BRAND} ${option.UF_MODEL}`;
+      const matchIndex = stringValue
+        .toLowerCase()
+        .indexOf(this.searchText.toLowerCase());
+      if (!this.searchText) return stringValue;
+      if (matchIndex > -1) {
+        const arrayOfChar = stringValue.split('');
+        const matchedStringInCarName = stringValue.slice(
+          matchIndex,
+          this.searchText.length + matchIndex,
+        );
+        arrayOfChar.splice(
+          matchIndex,
+          this.searchText.length,
+          `<span class="smart-search__match">${matchedStringInCarName}</span>`,
+        );
+        return arrayOfChar.join('');
+      }
+      return stringValue;
+    },
+    onInput(value) {
+      if (value) {
+        this.$emit('input', value);
+      }
+    },
+    getLabel({ UF_BRAND, UF_MODEL }) {
+      return `${UF_BRAND} ${UF_MODEL}`;
+    },
+    updateItems(searchString) {
+      this.items = this.filterCarsList(searchString);
+    },
+    filterCarsList(searchText) {
+      const {
+        cars,
+        isFilterMatch,
+        translit,
+        keyMapRusToEng,
+        keyMapEngToRus,
+      } = this;
+      return cars.filter((car) => {
+        const fullCarName = `${car.UF_BRAND} ${car.UF_MODEL}`;
+        return isFilterMatch(fullCarName, searchText)
+        || isFilterMatch(fullCarName, translit(searchText))
+        || isFilterMatch(fullCarName, keyMapEngToRus(searchText))
+        || isFilterMatch(fullCarName, keyMapRusToEng(searchText));
+      });
+    },
+    translit(str) {
+      const symbols = str.split('');
+      return symbols.map(char => TranslitKeyMap[char] || char).join('');
+    },
+    keyMapRusToEng(str) {
+      const symbols = str.split('');
+      return symbols.map(char => RusToEngKeyMap[char] || char)
+        .join('');
+    },
+    keyMapEngToRus(str) {
+      const symbols = str.split('');
+      return symbols.map(char => EngToRusKeyMap[char] || char)
+        .join('');
+    },
+    isFilterMatch(currentValue, filterValue) {
+      return currentValue.toLowerCase().indexOf(filterValue.toLowerCase()) !== -1;
+    },
+    onSearchChange(value) {
+      if (value.length >= this.maxCharsTrigger) {
+        this.searchTimeOut = setTimeout(() => {
+          this.items = this.filterCarsList(value);
+          if (this.items.length) this.showList = true;
+          clearTimeout(this.searchTimeOut);
+        }, 500);
+      } else {
+        this.items = [];
+      }
+      this.focusIndex = -1;
+    },
+    /**
+     * @return {Function}
+     */
+    scrollContainerTo(direction) {
+      const {
+        itemMinHeight,
+        itemsContainerMaxHeight,
+        focusIndex,
+        scrollbar,
+      } = this;
+      const itemsCount = this.items.length;
+      const maxItemsInContainer = Math.floor(
+        itemsContainerMaxHeight / itemMinHeight,
+      );
+      const maxScrollTop = scrollbar.scrollHeight - itemsContainerMaxHeight;
+      const isScrollNotAvailable = itemsCount > maxItemsInContainer
+        && focusIndex >= maxItemsInContainer - 2;
+      if (!isScrollNotAvailable) {
+        return;
+      }
+      if (direction === 'down') {
+        this.scrollbar.scrollTop += itemMinHeight;
+      }
+      if (direction === 'up') {
+        this.scrollbar.scrollTop -= itemMinHeight;
+      }
+      if (direction === 'start') {
+        this.scrollbar.scrollTop = 0;
+      }
+      if (direction === 'end') {
+        this.scrollbar.scrollTop = maxScrollTop;
+      }
+    },
+  },
+  computed: {
+    scrollbar() {
+      return this.$refs.scrollbar;
+    },
+    containerMaxHeight() {
+      return (this.showList && this.items.length)
+        ? `${this.itemsContainerMaxHeight}px`
+        : '0px';
+    },
+  },
+  watch: {
+    searchText(value) {
+      if (
+        value
+        && typeof value === 'string'
+      ) {
+        this.onSearchChange(value);
+      }
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .smart-search {
   position: relative;
   width: 100%;
+  z-index: 99999;
   height: 73px;
+  &__input-wrapper {
+    height: 73px;
+    width: 100%;
+    position: relative;
+    z-index: 100;
+  }
+  &__match {
+    text-decoration: underline;
+    color: $black;
+  }
   &__search-icon,
   &__clear-btn {
     position: absolute;
@@ -105,6 +331,61 @@ export default {
     text-transform: uppercase;
     &::placeholder {
       color: #929292;;
+    }
+  }
+  &__items-wrapper {
+    position: relative;
+    z-index: 55;
+    border: none;
+    overflow: hidden;
+    border-top: none;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    border-bottom: 1px solid transparent;
+    background-color: $white;
+    box-shadow: 0 10px 50px rgba(212, 188, 176, 0.5);
+    transition: max-height .5s ease;
+  }
+  &__items {
+    width: 100%;
+    max-height: 400px;
+    list-style: none;
+    text-align: left;
+    margin: 0;
+    padding-top: 15px;
+    padding-left: 0;
+  }
+  &__item {
+    color: #929292;
+    cursor: pointer;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 40px;
+    padding-right: 50px;
+    &:hover {
+      background-color:#f9f9f9;
+    }
+    &._active {
+      background-color: #f9f9f9;
+    }
+  }
+  &__bar-content {}
+  .vb-dragger {
+    right: 0;
+    width: 12px;
+    .vb-dragger-styler {
+      backface-visibility: hidden;
+      background-color: rgba(239,128,28,.1);
+      border-radius: 20px;
+      display: block;
+      height: 100%;
+      margin: 5px 5px 5px 0;
+      transform: rotate3d(0,0,0,0);
+      transition: height .2s ease-out, background-color .2s ease-in-out;
+      &:hover {
+        background-color: rgba(239,128,28,.5);
+        height: calc(100% + 10px);
+      }
     }
   }
 }
