@@ -16,4 +16,5 @@ export default {
   },
   driversData: {},
   programsData: {},
+  activeAutoTabIndex: 0,
 };

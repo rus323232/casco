@@ -1,0 +1,3 @@
+<template>
+  <svg id="SVGDoc" width="16" height="16" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16"><defs><path d="M1089.00906,437.54051c-0.05924,0.26729 0.18145,0.50679 0.44805,0.44179l3.62689,-0.88173l-3.25292,-3.26346zM1104.6737,423.88174l-1.4515,-1.45888c-0.56096,-0.56381 -1.47183,-0.56381 -2.03469,0l-1.39039,1.39746l3.25476,3.27133l1.62182,-1.63007c0.43507,-0.43732 0.43507,-1.14255 0,-1.57984zM1090.71234,432.95133l3.25292,3.2713l8.2387,-8.28063l-3.25476,-3.2713z" id="Path-0"/></defs><desc>Generated with Avocode.</desc><g transform="matrix(1,0,0,1,-1089,-422)"><g><title>pencil</title><use xlink:href="#Path-0" fill="#ef7c1c" fill-opacity="1"/></g></g></svg>
+</template>

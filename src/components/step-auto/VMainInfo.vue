@@ -3,8 +3,9 @@
     <v-smart-search
       :cars="cars.all"
       :value="selectedModel"
-      placeholder="Введите название автомобиля"
       @input="onSmartSearchInput"
+      @delete="clearData"
+      placeholder="Введите название автомобиля"
     />
     <div class="main-info__content">
       <v-tabs-slider
@@ -83,9 +84,6 @@ export default {
     onBrandSelect(brand) {
       if (this.carsBrands.includes(brand)) {
         this.selectedBrand = brand;
-        this.$nextTick().then(() => {
-          this.slider.showTab(1);
-        });
       }
     },
     onBrandUnSelect() {
@@ -96,6 +94,7 @@ export default {
       this.selectedModel = {
         ...model,
       };
+      this.$emit('complete');
     },
     onModelUnSelect() {
       const { selectedModel } = this;
@@ -103,17 +102,28 @@ export default {
         ...Object.keys(selectedModel).map(key => ({ [key]: '' })),
       };
     },
+    clearData() {
+      this.onBrandUnSelect();
+      this.onModelUnSelect();
+    },
     onSmartSearchInput(newValue) {
       if (!newValue) return;
       this.selectedBrand = newValue.UF_BRAND;
       this.selectedModel = {
-        ...Object.keys(newValue).reduce((acc, key) => {
-          if (key in this.selectedModel) {
-            acc[key] = newValue[key];
-          }
-          return acc;
-        }, {}),
+        ...newValue,
       };
+      this.$emit('complete');
+    },
+    slideToTab(tabName) {
+      const tabsNames = [
+        'brand',
+        'model',
+      ];
+      if (tabName.includes(tabName)) {
+        this.$nextTick().then(() => {
+          this.slider.showTab(tabsNames.indexOf(tabName));
+        });
+      }
     },
   },
   computed: {
@@ -121,6 +131,9 @@ export default {
       selectedBrand: 'autoData.brand',
       selectedModel: 'autoData.model',
     }),
+    expandAllCarsListIfNeed() {
+
+    },
     errorText() {
       return (this.showError && !this.selectedBrand)
         ? 'Сначала выберите марку'
@@ -155,12 +168,21 @@ export default {
         },
         {
           title: 'Модель',
-          disabled: this.selectedBrand === '',
+          disabled: !this.isBrandSelect,
         },
       ];
     },
     slider() {
       return this.$refs.slider;
+    },
+  },
+  watch: {
+    selectedBrand(brand) {
+      if (brand) {
+        this.slideToTab('model');
+      } else {
+        this.slideToTab('brand');
+      }
     },
   },
 };

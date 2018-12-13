@@ -54,6 +54,11 @@ export default {
     setExpandHeight() {
       this.itemDOMElement.style.maxHeight = '9999px';
     },
+    /**
+     * Toggle slide item by index
+     * @param index{Number}
+     * @public
+     */
     toggleContent(index) {
       this.currentItemIndex = index;
       if (!this.itemDOMElement) return;
@@ -81,7 +86,9 @@ export default {
         value !== null
         && this.itemDOMElement instanceof Element
       ) {
-        this.toggleContent(this.toggleElementByIndex);
+        this.$nextTick().then(() => {
+          this.toggleContent(value);
+        });
       }
     },
   },
@@ -105,6 +112,7 @@ $selector : '.accordion';
     transition: max-height .5s ease;
     box-shadow: 0 10px 50px rgba(212, 188, 176, 0.5);
     background-color: #ffffff;
+    margin-bottom: 20px;
   }
 }
 </style>

@@ -4,7 +4,7 @@
       <label class="smart-search__label">
         <input type="text"
                class="smart-search__input"
-               v-model="searchText"
+               v-model.trim="searchText"
                @focus="showItems"
                @blur="onBlur"
                @keydown="keyDown"
@@ -13,7 +13,9 @@
       <div class="smart-search__search-icon">
         <icon-search />
       </div>
-      <button class="smart-search__clear-btn">
+      <button class="smart-search__clear-btn"
+              @click="clearData"
+      >
         <icon-close />
       </button>
     </div>
@@ -38,6 +40,7 @@
               }"
               v-for="(item, index) of items"
               :key="item.id"
+              @click="chooseItem(item)"
           >
             <span v-html="HTMLContent(item)"></span>
           </li>
@@ -62,7 +65,6 @@ export default {
   props: {
     value: {
       type: [Object, Array, String],
-      required: true,
     },
     cars: {
       type: Array,
@@ -72,27 +74,33 @@ export default {
       type: String,
       default: '',
     },
-    initialText: {
-      type: String,
-      default: '',
-    },
     itemMinHeight: {
       type: Number,
       default: 48,
     },
     itemsContainerMaxHeight: {
       type: Number,
-      default: 400,
+      default: 444,
+    },
+    itemsContainerTopOffset: {
+      type: Number,
+      default: 44,
     },
     maxCharsTrigger: {
       type: Number,
       default: 2,
     },
+    getLabel: {
+      type: Function,
+      default({ UF_BRAND, UF_MODEL }) {
+        return `${UF_BRAND} ${UF_MODEL}`;
+      },
+    },
   },
   data() {
     return {
       items: [],
-      searchText: this.initialText,
+      searchText: this.getLabel(this.value).trim(),
       showList: false,
       focusIndex: -1, // индекс активного элемента списка
       searchTimeOut: {}, // таймаут запроса после смены строки поиска
@@ -100,31 +108,53 @@ export default {
   },
   methods: {
     onBlur() {
-      //this.showList = false;
+      this.showList = false;
+    },
+    clearData() {
+      this.$emit('delete');
+      this.searchText = '';
+    },
+    onScrollbarWheel() {
+      this.refreshFocusIndex();
+    },
+    chooseItem(item) {
+      if (item) {
+        this.searchText = this.getLabel(item);
+        this.$emit('input', item);
+      }
+    },
+    refreshFocusIndex() {
+      if (this.focusIndex !== -1) {
+        this.focusIndex = -1;
+      }
     },
     showItems() {
-      this.showList = true;
       if (this.items.length && this.searchText) {
         this.showList = true;
       }
     },
-    keyDown(e) {
+    handleArrowKeys(key) {
       const { scrollContainerTo } = this;
-      const key = e.keyCode;
-      // Disable when list isn't showing up
+      // When cursor out of range
+      const lastItemIndex = this.items.length - 1;
       if (!this.showList) return;
-
       switch (key) {
         case 40: // down
           this.focusIndex += 1;
-          scrollContainerTo('down');
+          if (this.focusIndex === 0) {
+            scrollContainerTo('start');
+          } else {
+            scrollContainerTo('down');
+          }
           break;
         case 38: // up
           this.focusIndex -= 1;
           scrollContainerTo('up');
           break;
         case 13: // enter
-          //this.selectList(this.items[this.focusIndex]);
+          if (this.focusIndex !== -1) {
+            this.chooseItem(this.items[this.focusIndex]);
+          }
           this.showList = false;
           break;
         case 27: // esc
@@ -133,8 +163,6 @@ export default {
         default:
           this.showList = false;
       }
-      // When cursor out of range
-      const lastItemIndex = this.items.length - 1;
       if (this.focusIndex > lastItemIndex) {
         this.focusIndex = 0;
         scrollContainerTo('start');
@@ -143,11 +171,27 @@ export default {
         scrollContainerTo('end');
       }
     },
+    keyDown(e) {
+      const key = e.keyCode;
+      switch (key) {
+        case 37: // left
+        case 38: // up
+        case 39: // right
+        case 40: // down
+        case 13: // enter
+        case 27: // esc
+          this.handleArrowKeys(key);
+          break;
+        default:
+          this.showList = false;
+          this.onSearchChange(e.target.value);
+      }
+    },
     /**
      * @return {string}
      */
     HTMLContent(option) {
-      const stringValue = `${option.UF_BRAND} ${option.UF_MODEL}`;
+      const stringValue = this.getLabel(option);
       const matchIndex = stringValue
         .toLowerCase()
         .indexOf(this.searchText.toLowerCase());
@@ -172,9 +216,6 @@ export default {
         this.$emit('input', value);
       }
     },
-    getLabel({ UF_BRAND, UF_MODEL }) {
-      return `${UF_BRAND} ${UF_MODEL}`;
-    },
     updateItems(searchString) {
       this.items = this.filterCarsList(searchString);
     },
@@ -183,11 +224,12 @@ export default {
         cars,
         isFilterMatch,
         translit,
+        getLabel,
         keyMapRusToEng,
         keyMapEngToRus,
       } = this;
       return cars.filter((car) => {
-        const fullCarName = `${car.UF_BRAND} ${car.UF_MODEL}`;
+        const fullCarName = getLabel(car);
         return isFilterMatch(fullCarName, searchText)
         || isFilterMatch(fullCarName, translit(searchText))
         || isFilterMatch(fullCarName, keyMapEngToRus(searchText))
@@ -214,14 +256,14 @@ export default {
     onSearchChange(value) {
       if (value.length >= this.maxCharsTrigger) {
         this.searchTimeOut = setTimeout(() => {
-          this.items = this.filterCarsList(value);
+          this.updateItems(value);
           if (this.items.length) this.showList = true;
           clearTimeout(this.searchTimeOut);
         }, 500);
       } else {
         this.items = [];
       }
-      this.focusIndex = -1;
+      this.refreshFocusIndex();
     },
     /**
      * @return {Function}
@@ -230,16 +272,15 @@ export default {
       const {
         itemMinHeight,
         itemsContainerMaxHeight,
-        focusIndex,
         scrollbar,
+        itemsContainerTopOffset,
       } = this;
       const itemsCount = this.items.length;
       const maxItemsInContainer = Math.floor(
         itemsContainerMaxHeight / itemMinHeight,
       );
       const maxScrollTop = scrollbar.scrollHeight - itemsContainerMaxHeight;
-      const isScrollNotAvailable = itemsCount > maxItemsInContainer
-        && focusIndex >= maxItemsInContainer - 2;
+      const isScrollNotAvailable = itemsCount > maxItemsInContainer;
       if (!isScrollNotAvailable) {
         return;
       }
@@ -253,7 +294,7 @@ export default {
         this.scrollbar.scrollTop = 0;
       }
       if (direction === 'end') {
-        this.scrollbar.scrollTop = maxScrollTop;
+        this.scrollbar.scrollTop = maxScrollTop + itemsContainerTopOffset;
       }
     },
   },
@@ -267,15 +308,10 @@ export default {
         : '0px';
     },
   },
-  watch: {
-    searchText(value) {
-      if (
-        value
-        && typeof value === 'string'
-      ) {
-        this.onSearchChange(value);
-      }
-    },
+  mounted() {
+    this.scrollbar.onwheel = () => {
+      this.onScrollbarWheel();
+    };
   },
 };
 </script>
@@ -336,6 +372,7 @@ export default {
   &__items-wrapper {
     position: relative;
     z-index: 55;
+    margin-top: -44px;
     border: none;
     overflow: hidden;
     border-top: none;
@@ -369,7 +406,9 @@ export default {
       background-color: #f9f9f9;
     }
   }
-  &__bar-content {}
+  &__bar-content {
+    margin-top: 44px;
+  }
   .vb-dragger {
     right: 0;
     width: 12px;
